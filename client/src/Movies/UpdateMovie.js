@@ -21,7 +21,6 @@ const UpdateMovie = () => {
   }, [])
   
   const onSubmit = e => {
-    e.preventDefault();
     axios.put(`http://localhost:5000/api/movies/${id}`, form)
   }
 
@@ -102,6 +101,7 @@ const UpdateMovie = () => {
         />
         <button onClick={addStar}>+</button>
       </label>
+      <button>Submit Changes</button>
     </form>
   )
 }
