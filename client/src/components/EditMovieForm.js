@@ -4,16 +4,27 @@ import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
-const EditMovieForm = (props) => {
+const EditMovieForm = ({ update }) => {
 	const { push } = useHistory();
+	const { id } = useParams();
 
 	const [movie, setMovie] = useState({
 		title:"",
 		director: "",
 		genre: "",
-		metascore: 0,
+		metascore: 1,
 		description: ""
 	});
+
+	useEffect(()=>{
+    axios.get(`http://localhost:5000/api/movies/${id}`)
+      .then(res => {
+        setMovie(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
 	
 	const handleChange = (e) => {
         setMovie({
@@ -22,8 +33,14 @@ const EditMovieForm = (props) => {
         });
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+		axios.put(`http://localhost:5000/api/movies/${id}`, {...movie, id })
+		.then(res => {
+			update(res.data)
+			push(`/movies/${id}`);
+		})
+		.catch(err => console.log("Error", err))
 	}
 	
 	const { title, director, genre, metascore, description } = movie;
@@ -50,7 +67,8 @@ const EditMovieForm = (props) => {
 					</div>
 					<div className="form-group">
 						<label>Metascore</label>
-						<input value={metascore} onChange={handleChange} name="metascore" type="number" className="form-control"/>
+						<input value={metascore} onChange={handleChange} name="metascore" type="number" className="form-control"
+						step="1" min="1" max="100"/>
 					</div>		
 					<div className="form-group">
 						<label>Description</label>
