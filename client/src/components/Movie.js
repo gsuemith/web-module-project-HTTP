@@ -78,7 +78,7 @@ const Movie = (props) => {
         {
             deleting && 
             <DeleteMovieModal 
-                cancel={e => setDeleting(false)}
+                cancel={()=> setDeleting(false)}
                 confirm={handleDelete}
             />
         }
